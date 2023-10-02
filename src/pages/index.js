@@ -2,7 +2,7 @@ import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import userService from "./gateway/services/userService";
+import { userService } from "./gateway/services/userService";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +19,7 @@ export default function Home() {
 
   function renderizaItens() {
     return lista.map((i) => (
-      <div className={styles.items}>
+      <div className={styles.items} key={i.id}>
         <p className={styles.item}>{i.nome}</p>
         <p className={styles.item}>{i.email}</p>
         <p className={styles.opcoes}>
@@ -40,15 +40,15 @@ export default function Home() {
     ));
   }
 
-  function deletar() {
+  function deletar(id) {
     alert("selecionou deletar");
   }
 
-  function editar() {
+  function editar(id) {
     alert("selecionou editar");
   }
 
-  function ver() {
+  function ver(id) {
     alert("selecionou ver");
   }
 
