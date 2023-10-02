@@ -1,33 +1,40 @@
 import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { userService } from "./gateway/services/userService";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [lista, setLista] = useState([
-    {
-      id: 1,
-      nome: "item1",
-      preco: 33,
-    },
-    {
-      id: 2,
-      nome: "item2",
-      preco: 55,
-    },
-  ]);
+  const [lista, setLista] = useState([]);
+  const [user, setUser] = useState({
+    nome: "",
+    email: "",
+  });
+
+  function handleChange(e) {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  }
 
   function renderizaItens() {
     return lista.map((i) => (
       <div className={styles.items}>
         <p className={styles.item}>{i.nome}</p>
-        <p className={styles.item}>R$ {i.preco}</p>
+        <p className={styles.item}>{i.email}</p>
         <p className={styles.opcoes}>
-          <button className={styles.buttonVer} onClick={() => ver(i.id)}>Ver</button>
-          <button className={styles.buttonEditar} onClick={() => editar(i.id)}>Editar</button>
-          <button className={styles.buttonDeletar} onClick={() => deletar(i.id)}>Deletar</button>
+          <button className={styles.buttonVer} onClick={() => ver(i.id)}>
+            Ver
+          </button>
+          <button className={styles.buttonEditar} onClick={() => editar(i.id)}>
+            Editar
+          </button>
+          <button
+            className={styles.buttonDeletar}
+            onClick={() => deletar(i.id)}
+          >
+            Deletar
+          </button>
         </p>
       </div>
     ));
@@ -46,8 +53,30 @@ export default function Home() {
   }
 
   function adicionar() {
-    alert("selecionou adicionar");
+    userService
+      .post(user)
+      .then((res) => {
+        buscarLista();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+  function buscarLista() {
+    userService
+      .get()
+      .then((res) => {
+        setLista(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  useEffect(() => {
+    buscarLista();
+  }, []);
 
   return (
     <>
@@ -60,13 +89,34 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.titulo}>Minha Aplicação</h1>
         <div className={styles.tabela}>
-          <h2 className={styles.tituloTabela}>Lista</h2>
+          <div className={styles.header}>
+            <h2 className={styles.tituloTabela}>Lista</h2>
+            <form>
+              <input
+                className={styles.input}
+                type="text"
+                name="nome"
+                placeholder="Nome"
+                onChange={handleChange}
+              />
+              <input
+                className={styles.input}
+                type="text"
+                name="email"
+                placeholder="Email"
+                onChange={handleChange}
+              />
+              <button className={styles.buttonAdicionar} onClick={adicionar}>
+                Adicionar
+              </button>
+            </form>
+          </div>
           <div className={styles.items}>
             <p className={styles.item}>Nome</p>
-            <p className={styles.item}>Preço (R$)</p>
+            <p className={styles.item}>Email</p>
             <p className={styles.item}>Opções</p>
           </div>
-          {renderizaItens()}
+          {lista.lenght > 0 ? renderizaItens() : <>Nenhum usuário encontrado</>}
         </div>
       </main>
     </>

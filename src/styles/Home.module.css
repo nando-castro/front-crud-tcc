@@ -11,6 +11,18 @@
   /* border: 1px solid #000; */
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input {
+  padding: 0.5rem;
+  border-radius: 100px;
+  margin-left: 5px;
+}
+
 .tituloTabela {
   padding: 1rem;
 }
