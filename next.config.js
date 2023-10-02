@@ -2,10 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    externalDir: true
-  },
-  // Potential new config flag:
-  disableExperimentalFeaturesWarning: true
+    externalDir: true | {
+        enabled: true,
+        silent: true,
+   },
+  }
 }
 
 
