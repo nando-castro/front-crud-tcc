@@ -9,10 +9,6 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const [lista, setLista] = useState([]);
   const [atualiza, setAtualiza] = useState(false);
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-  });
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,8 +34,13 @@ export default function Home() {
   }
 
   function editar(id) {
+    const data = {
+      name: name,
+      email: email,
+    };
+
     axios
-      .put(`https://api-crud-dnla.onrender.com/user/${id}`, user)
+      .put(`https://api-crud-dnla.onrender.com/user/${id}`, data)
       .then((res) => {
         alert("Usuário editado");
       })
@@ -65,9 +66,9 @@ export default function Home() {
       email: email,
     };
     axios
-      .post("https://api-crud-dnla.onrender.com/user", {data})
+      .post("https://api-crud-dnla.onrender.com/user", data)
       .then((res) => {
-        // setAtualiza(!atualiza);
+        setAtualiza(!atualiza);
       })
       .catch((err) => {
         console.log(err);
@@ -79,34 +80,10 @@ export default function Home() {
       .get("https://api-crud-dnla.onrender.com/users")
       .then((res) => {
         setLista(res.data);
-        // setAtualiza(!atualiza);
       })
       .catch((err) => {
         console.log(err);
       });
-  }
-
-  function renderizaItens() {
-    return lista.map((i) => (
-      <div className={styles.items} key={i.id}>
-        <p className={styles.item}>{i.name}</p>
-        <p className={styles.item}>{i.email}</p>
-        <p className={styles.opcoes}>
-          <button className={styles.buttonVer} onClick={() => ver(i.id)}>
-            Ver
-          </button>
-          <button className={styles.buttonEditar} onClick={() => editar(i.id)}>
-            Editar
-          </button>
-          <button
-            className={styles.buttonDeletar}
-            onClick={() => deletar(i.id)}
-          >
-            Deletar
-          </button>
-        </p>
-      </div>
-    ));
   }
 
   useEffect(() => {
@@ -141,13 +118,10 @@ export default function Home() {
                 placeholder="Email"
                 onChange={handleChangeEmail}
               />
-              <button
-                className={styles.buttonAdicionar}
-                onClick={adicionar}
-              >
-                Adicionar
-              </button>
             </form>
+            <button className={styles.buttonAdicionar} onClick={adicionar}>
+              Adicionar
+            </button>
           </div>
           <div className={styles.items}>
             <p className={styles.item}>Nome</p>
