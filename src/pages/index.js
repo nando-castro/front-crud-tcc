@@ -1,8 +1,8 @@
 import styles from "@/styles/Home.module.css";
+import axios from "axios";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { userService } from "./gateway/services/userService";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,8 +53,8 @@ export default function Home() {
   }
 
   function adicionar() {
-    userService
-      .post(user)
+    axios
+      .post("https://api-crud-dnla.onrender.com/user",user)
       .then((res) => {
         buscarLista();
       })
@@ -64,8 +64,8 @@ export default function Home() {
   }
 
   function buscarLista() {
-    userService
-      .get()
+    axios
+      .get("https://api-crud-dnla.onrender.com/users")
       .then((res) => {
         setLista(res.data);
       })
