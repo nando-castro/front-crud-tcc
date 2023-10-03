@@ -8,19 +8,88 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [lista, setLista] = useState([]);
+  const [atualiza, setAtualiza] = useState(false);
   const [user, setUser] = useState({
-    nome: "",
+    name: "",
     email: "",
   });
 
-  function handleChange(e) {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  function handleChangeName(e) {
+    setName(e.target.value);
+  }
+
+  function handleChangeEmail(e) {
+    setEmail(e.target.value);
+  }
+
+  function deletar(id) {
+    axios
+      .delete(`https://api-crud-dnla.onrender.com/user/${id}`)
+      .then((res) => {
+        alert("Usuário deletado");
+        setAtualiza(!atualiza);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function editar(id) {
+    axios
+      .put(`https://api-crud-dnla.onrender.com/user/${id}`, user)
+      .then((res) => {
+        alert("Usuário editado");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function ver(id) {
+    axios
+      .get(`https://api-crud-dnla.onrender.com/user/${id}`)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function adicionar() {
+    const data = {
+      name: name,
+      email: email,
+    };
+    axios
+      .post("https://api-crud-dnla.onrender.com/user", {data})
+      .then((res) => {
+        // setAtualiza(!atualiza);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function buscarLista() {
+    axios
+      .get("https://api-crud-dnla.onrender.com/users")
+      .then((res) => {
+        setLista(res.data);
+        // setAtualiza(!atualiza);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function renderizaItens() {
     return lista.map((i) => (
       <div className={styles.items} key={i.id}>
-        <p className={styles.item}>{i.nome}</p>
+        <p className={styles.item}>{i.name}</p>
         <p className={styles.item}>{i.email}</p>
         <p className={styles.opcoes}>
           <button className={styles.buttonVer} onClick={() => ver(i.id)}>
@@ -40,43 +109,9 @@ export default function Home() {
     ));
   }
 
-  function deletar(id) {
-    alert("selecionou deletar");
-  }
-
-  function editar(id) {
-    alert("selecionou editar");
-  }
-
-  function ver(id) {
-    alert("selecionou ver");
-  }
-
-  function adicionar() {
-    axios
-      .post("https://api-crud-dnla.onrender.com/user",user)
-      .then((res) => {
-        buscarLista();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function buscarLista() {
-    axios
-      .get("https://api-crud-dnla.onrender.com/users")
-      .then((res) => {
-        setLista(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   useEffect(() => {
     buscarLista();
-  }, []);
+  }, [atualiza]);
 
   return (
     <>
@@ -95,18 +130,21 @@ export default function Home() {
               <input
                 className={styles.input}
                 type="text"
-                name="nome"
+                name="name"
                 placeholder="Nome"
-                onChange={handleChange}
+                onChange={handleChangeName}
               />
               <input
                 className={styles.input}
                 type="text"
                 name="email"
                 placeholder="Email"
-                onChange={handleChange}
+                onChange={handleChangeEmail}
               />
-              <button className={styles.buttonAdicionar} onClick={adicionar}>
+              <button
+                className={styles.buttonAdicionar}
+                onClick={adicionar}
+              >
                 Adicionar
               </button>
             </form>
@@ -116,7 +154,36 @@ export default function Home() {
             <p className={styles.item}>Email</p>
             <p className={styles.item}>Opções</p>
           </div>
-          {lista.lenght > 0 ? renderizaItens() : <>Nenhum usuário encontrado</>}
+          {lista.length > 0 && lista !== "No users found" ? (
+            lista.map((i) => (
+              <div className={styles.items} key={i.id}>
+                <p className={styles.item}>{i.name}</p>
+                <p className={styles.item}>{i.email}</p>
+                <p className={styles.opcoes}>
+                  <button
+                    className={styles.buttonVer}
+                    onClick={() => ver(i.id)}
+                  >
+                    Ver
+                  </button>
+                  <button
+                    className={styles.buttonEditar}
+                    onClick={() => editar(i.id)}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className={styles.buttonDeletar}
+                    onClick={() => deletar(i.id)}
+                  >
+                    Deletar
+                  </button>
+                </p>
+              </div>
+            ))
+          ) : (
+            <>Nenhum usuário encontrado</>
+          )}
         </div>
       </main>
     </>
