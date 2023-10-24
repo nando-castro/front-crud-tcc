@@ -57,6 +57,11 @@ export default function Home() {
       email: email,
     };
     setLoading(true);
+    if(data.name === "" || data.email === "") {
+      alert("Preencha todos os campos");
+      setLoading(false);
+      return;
+    }
     axios
       .put(`${apiUrl}/user/${id}`, data)
       .then((res) => {
@@ -77,6 +82,11 @@ export default function Home() {
       email: email,
     };
     setLoading(true);
+    if(data.name === "" || data.email === "") {
+      alert("Preencha todos os campos");
+      setLoading(false);
+      return;
+    }
     axios
       .post(`${apiUrl}/user`, data)
       .then((res) => {
@@ -160,7 +170,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1 className={styles.titulo}>Minha Aplicação</h1>
+        <h1 className={styles.titulo}>Aplicação CRUD</h1>
         <div className={styles.tabela}>
           <div className={styles.header}>
             <h2 className={styles.tituloTabela}>Lista</h2>
