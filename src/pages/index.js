@@ -57,7 +57,7 @@ export default function Home() {
       email: email,
     };
     setLoading(true);
-    if(data.name === "" || data.email === "") {
+    if (data.name === "" || data.email === "") {
       alert("Preencha todos os campos");
       setLoading(false);
       return;
@@ -82,7 +82,7 @@ export default function Home() {
       email: email,
     };
     setLoading(true);
-    if(data.name === "" || data.email === "") {
+    if (data.name === "" || data.email === "") {
       alert("Preencha todos os campos");
       setLoading(false);
       return;
@@ -149,11 +149,7 @@ export default function Home() {
   }
 
   function renderLoading() {
-    return (
-      <div className={styles.loading}>
-        <p>Carregando...</p>
-      </div>
-    );
+    return <div className={styles.loading}></div>;
   }
 
   useEffect(() => {
