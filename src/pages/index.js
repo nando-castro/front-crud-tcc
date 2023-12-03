@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// const apiUrl = "https://api-crud-dnla.onrender.com";
-const apiUrl = "http://localhost:5000";
+const apiUrl = "https://api-crud-dnla.onrender.com";
 
 export default function Home() {
   const [lista, setLista] = useState([]);
@@ -153,7 +152,11 @@ export default function Home() {
   }
 
   function renderLoading() {
-    return <div className={styles.loading}></div>;
+    return (
+      <div className={styles.loading}>
+        <p>Carregando...</p>
+      </div>
+    );
   }
 
   useEffect(() => {
