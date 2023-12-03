@@ -153,11 +153,7 @@ export default function Home() {
   }
 
   function renderLoading() {
-    return (
-      <div className={styles.loading}>
-        <p>Carregando...</p>
-      </div>
-    );
+    return <div className={styles.loading}></div>;
   }
 
   useEffect(() => {
