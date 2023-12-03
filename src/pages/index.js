@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const apiUrl = "https://api-crud-dnla.onrender.com";
+// const apiUrl = "https://api-crud-dnla.onrender.com";
+const apiUrl = "http://localhost:5000";
 
 export default function Home() {
   const [lista, setLista] = useState([]);
@@ -57,7 +58,7 @@ export default function Home() {
       email: email,
     };
     setLoading(true);
-    if(data.name === "" || data.email === "") {
+    if (data.name === "" || data.email === "") {
       alert("Preencha todos os campos");
       setLoading(false);
       return;
@@ -82,7 +83,7 @@ export default function Home() {
       email: email,
     };
     setLoading(true);
-    if(data.name === "" || data.email === "") {
+    if (data.name === "" || data.email === "") {
       alert("Preencha todos os campos");
       setLoading(false);
       return;
@@ -109,6 +110,9 @@ export default function Home() {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.status === 404) {
+          alert("Nenhum usuário encontrado");
+        }
         setLoading(false);
       });
   }
